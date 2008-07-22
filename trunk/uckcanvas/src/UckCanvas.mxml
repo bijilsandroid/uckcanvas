@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"  
+	backgroundColor="#000000" creationComplete="initApp()" name="mainApp">
+	<mx:Script>
+		<![CDATA[
+			import com.ctu.uckcanvas.UckAppManager;
+			public var uckAppManager: UckAppManager;
+
+			public function initApp():void {
+				uckAppManager = new UckAppManager(baseCanvas, propertyBar);
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:ArrayCollection id="fontArray">
+		<mx:Object label="Arial" data="Arial"/>
+		<mx:Object label="Trebuchet MS" data="Trebuchet MS"/>
+		<mx:Object label="맑은 고딕" data="맑은 고"/>
+	</mx:ArrayCollection>
+	<mx:ArrayCollection id="fontSizeArray">
+		<mx:Object label="8" data="8"/>
+		<mx:Object label="10" data="10"/>
+		<mx:Object label="12" data="12"/>
+		<mx:Object label="14" data="14"/>
+		<mx:Object label="16" data="16"/>
+		<mx:Object label="18" data="18"/>
+	</mx:ArrayCollection>
+	<mx:ArrayCollection id="fontWeightArray">
+		<mx:Object label="Normal" data="normal"/>
+		<mx:Object label="Bold" data="bold"/>
+		<mx:Object label="Italic" data="italic"/>
+		<mx:Object label="Bold Italic" data="bold italic"/>
+		<mx:Object label="Underline" data="underline"/>
+	</mx:ArrayCollection>
+	
+	<mx:WipeLeft id="wlEffect" duration="300"/>
+	<mx:WipeRight id="wrEffect" duration="300"/>
+	
+	<mx:VBox x="21" y="21" width="800" height="650">
+		<mx:HBox width="800" height="30">
+			<mx:Button label="select" id="selectBtn" click="uckAppManager.selectionTool()"/>
+			<mx:Button label="text" id="textBtn" click="uckAppManager.textTool()" />
+			<mx:Button label="pen" id="penBtn" click="uckAppManager.penTool()" />
+			<mx:Button label="rectangle" id="rectangleBtn" click="uckAppManager.rectTool()"/>
+			<mx:Button label="image" id="imageBtn" click="uckAppManager.imageTool()"/>
+			<mx:Button label="clear" id="clearBtn" click="uckAppManager.clearCanvas();"/>
+		</mx:HBox>
+		<mx:HBox width="800" height="30">
+			<mx:ViewStack id="propertyBar" name="propertyBar" width="100%" height="100%" selectedIndex="0">
+				<mx:HBox width="100%" height="100%" id="selectionStyleBar" hideEffect="wrEffect" showEffect="wlEffect">
+					<mx:Text text="Selection tool style" color="#FFFFFF" />
+				</mx:HBox>
+				<mx:HBox width="100%" height="100%" id="textStyleBar" hideEffect="wrEffect" showEffect="wlEffect">
+					<mx:ComboBox id="textFontFamily" dataProvider="{fontArray}" width="100"  change="uckAppManager.changeStyle('fontFamily', textFontFamily.value)"  ></mx:ComboBox>
+					<mx:ComboBox id="textFontSize" dataProvider="{fontSizeArray}" width="60" selectedIndex="1" change="uckAppManager.changeStyle('fontSize', textFontSize.value)"></mx:ComboBox>
+					<mx:ComboBox id="textFontWeight" dataProvider="{fontWeightArray}" width="100" change="uckAppManager.changeStyle('fontWeight', textFontWeight.value)" ></mx:ComboBox>
+					<mx:ColorPicker id="textFontColor"  change="uckAppManager.changeStyle('color', textFontColor.value)"></mx:ColorPicker>
+				</mx:HBox>
+				<mx:HBox width="100%" height="100%" id="penStyleBar" hideEffect="wrEffect" showEffect="wlEffect">
+					<mx:Text text="Pen tool style" color="#FFFFFF" />
+				</mx:HBox>
+				<mx:HBox width="100%" height="100%" id="rectStyleBar" hideEffect="wrEffect" showEffect="wlEffect">
+					<mx:Text text="Fill :" color="#FFFFFF" width="35"/>
+					<mx:ColorPicker id="rectFillColor"  change="uckAppManager.changeStyle('backgroundColor', rectFillColor.value)"></mx:ColorPicker>
+					<mx:Text text="Stroke :" color="#FFFFFF" width="60"/>
+					<mx:ColorPicker id="rectStrokeColor"  change="uckAppManager.changeStyle('borderColor', rectStrokeColor.value)"></mx:ColorPicker>
+					<mx:Text text="Stroke Width :" color="#FFFFFF" width="90"/>
+					<mx:NumericStepper id="rectStrokeWidth" value="1" minimum="1" maximum="20" stepSize="1"  change="uckAppManager.changeStyle('borderStyle', 'solid');uckAppManager.changeStyle('borderThickness', rectStrokeWidth.value)"></mx:NumericStepper>
+					<mx:Text text="Alpha :" color="#FFFFFF" width="60"/>
+					<mx:NumericStepper id="rectAlpha" value="1" minimum="0" maximum="1" stepSize="0.1"  change="uckAppManager.changeStyle('borderStyle', 'solid');uckAppManager.changeStyle('backgroundAlpha', rectAlpha.value)"></mx:NumericStepper>
+				</mx:HBox>
+				<mx:HBox width="100%" height="100%" id="ImageStyleBar" hideEffect="wrEffect" showEffect="wlEffect">
+					<mx:Text text="Image tool style" color="#FFFFFF" />
+				</mx:HBox>
+			</mx:ViewStack>
+		</mx:HBox>
+		<mx:Canvas id="baseCanvas" width="800" height="500" backgroundColor="#FFFFFF"
+			borderColor="#9FA0A1" borderStyle="solid" borderThickness="0">
+		</mx:Canvas>
+	</mx:VBox>
+</mx:Application>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="400" height="125"
+		title="Image Upload" 
+		borderStyle="solid" showCloseButton="true" 
+		backgroundAlpha="0.3" backgroundColor="#DCBEBE" 
+		cornerRadius="8" verticalAlign="middle" horizontalAlign="center" 
+		fontSize="10" close="closeImageUploadWin()" >
+		<mx:Script>
+			<![CDATA[
+				import mx.managers.PopUpManager;
+				import flash.net.FileReference;
+				import flash.net.FileFilter;
+				
+				private var j:uint=10;
+				private var fileRef:FileReference;
+				
+				[Bindable]
+				public var callBack:Function = null;
+				
+				private function closeImageUploadWin():void {
+					PopUpManager.removePopUp(this);
+				}
+				
+				private function browseFile(): void {
+					trace(browseFile);
+					var imageTypes:FileFilter = new FileFilter("Images (*.jpg, *.jpeg, *.gif, *.png)", "*.jpg; *.jpeg; *.gif; *.png");
+					var allTypes:Array = new Array(imageTypes);
+					fileRef = new FileReference();
+					fileRef.addEventListener(Event.COMPLETE, completeHandler);
+					fileRef.addEventListener(Event.SELECT, selectHandler);
+					fileRef.addEventListener(ProgressEvent.PROGRESS, progressHandler);
+
+					fileRef.browse(allTypes);
+				}
+				
+				private function selectHandler(event:Event):void {
+					trace("selectHandler");
+					fileNameT.text = fileRef.name;
+				}
+				
+				private function uploadFile():void {
+					trace("uploadFile");
+					var request:URLRequest = new URLRequest("http://localhost:8080/jsp/upload.jsp");
+					try {
+						fileRef.upload(request);
+					} catch(error:Error) {
+						trace("unable to upload file+"+Error);
+					}
+				}
+				
+				private function progressHandler(event:ProgressEvent):void {
+					progressBar.setProgress(event.bytesLoaded, event.bytesTotal);
+					progressBar.label = "uploading " + event.bytesLoaded + "byte";
+				}
+				
+				private function completeHandler(event:Event):void {
+					trace("uploaded");
+					progressBar.label = "upload completed";
+					PopUpManager.removePopUp(this);
+					callBack("http://localhost:8080/uploadImage/"+fileRef.name);
+					return;
+				}
+				
+				
+			]]>
+		</mx:Script>
+			
+		<mx:TextInput id="fileNameT" x="10" y="10" height="27" width="251" />
+		<mx:Button x="280" y="10" label="Browser" height="27" width="80" click="browseFile()"/>
+		<mx:Button x="280" y="54" label="Upload" width="80" height="27" click="uploadFile()" />
+		<mx:ProgressBar id="progressBar" x="10" y="47" width="251" mode="manual" />
+</mx:TitleWindow>
