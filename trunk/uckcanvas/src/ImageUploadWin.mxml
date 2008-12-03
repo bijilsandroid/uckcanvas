@@ -57,6 +57,7 @@
 					trace("uploaded");
 					progressBar.label = "upload completed";
 					PopUpManager.removePopUp(this);
+					// specify uploaded image path
 					callBack("http://localhost:8080/uploadImage/"+fileRef.name);
 					return;
 				}
