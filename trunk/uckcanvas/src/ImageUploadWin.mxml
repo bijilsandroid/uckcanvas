@@ -18,7 +18,7 @@
 				public var callBack:Function = null;
 				
 				private function closeImageUploadWin():void {
-					PopUpManager.removePopUp(this);
+					PopUpManager.removePopUp(this); 
 				}
 				
 				private function browseFile(): void {
