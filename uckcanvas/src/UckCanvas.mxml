@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"  
-	backgroundColor="#000000" creationComplete="initApp()" name="mainApp">
+	backgroundColor="#000000" applicationComplete="initApp()" name="mainApp">
+	<mx:Style>
+		@font-face {
+		    src: url("assets/fonts/TAHOMA.TTF");
+		    fontFamily: "EmbeddedTahoma";
+		}
+	 	
+	</mx:Style>
 	<mx:Script>
 		<![CDATA[
 			import com.ctu.uckcanvas.UckAppManager;
 			public var uckAppManager: UckAppManager;
+			import mx.controls.TextArea;
 
 			public function initApp():void {
 				uckAppManager = new UckAppManager(baseCanvas, propertyBar);
@@ -13,6 +21,7 @@
 		]]>
 	</mx:Script>
 	<mx:ArrayCollection id="fontArray">
+		<mx:Object label="Tahoma Embedded" data="EmbeddedTahoma"/>
 		<mx:Object label="Arial" data="Arial"/>
 		<mx:Object label="Trebuchet MS" data="Trebuchet MS"/>
 		<mx:Object label="맑은 고딕" data="맑은 고"/>
@@ -51,8 +60,8 @@
 					<mx:Text text="Selection tool style" color="#FFFFFF" />
 				</mx:HBox>
 				<mx:HBox width="100%" height="100%" id="textStyleBar" hideEffect="wrEffect" showEffect="wlEffect">
-					<mx:ComboBox id="textFontFamily" dataProvider="{fontArray}" width="100"  change="uckAppManager.changeStyle('fontFamily', textFontFamily.value)"  ></mx:ComboBox>
-					<mx:ComboBox id="textFontSize" dataProvider="{fontSizeArray}" width="60" selectedIndex="1" change="uckAppManager.changeStyle('fontSize', textFontSize.value)"></mx:ComboBox>
+					<mx:ComboBox id="textFontFamily" dataProvider="{fontArray}" width="150"  change="uckAppManager.changeStyle('fontFamily', textFontFamily.value)"  ></mx:ComboBox>
+					<mx:ComboBox id="textFontSize" dataProvider="{fontSizeArray}" width="60" selectedIndex="6" change="uckAppManager.changeStyle('fontSize', textFontSize.value)"></mx:ComboBox>
 					<mx:ComboBox id="textFontWeight" dataProvider="{fontWeightArray}" width="100" change="uckAppManager.changeStyle('fontWeight', textFontWeight.value)" ></mx:ComboBox>
 					<mx:ColorPicker id="textFontColor"  change="uckAppManager.changeStyle('color', textFontColor.value)"></mx:ColorPicker>
 				</mx:HBox>
