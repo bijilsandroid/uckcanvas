@@ -8,12 +8,12 @@ package com.ctu.uckcanvas
 	import flash.geom.Rectangle;
 	
 	import mx.containers.Canvas;
-	import mx.containers.TitleWindow;
 	import mx.containers.ViewStack;
 	import mx.controls.Image;
 	import mx.controls.TextArea;
 	import mx.core.UIComponent;
 	import mx.managers.PopUpManager;
+	import mx.styles.CSSStyleDeclaration;
 
 	public class UckAppManager {
 		protected var baseCanvas:Canvas = null; 
@@ -272,8 +272,8 @@ package com.ctu.uckcanvas
 			textObj.setStyle("borderThickness", 0);
 			textObj.setStyle("backgroundAlpha", 0.0);
 			textObj.setStyle("focusAlpha", 0); 
-			textObj.setStyle("fontFamily", "Arial");
-			textObj.setStyle("fontSize", 10);
+			textObj.setStyle("fontFamily", "EmbeddedTahoma");
+			textObj.setStyle("fontSize", 18);
 			textObj.percentHeight = 100;
 			textObj.percentWidth = 100;
 			baseCanvas.addChild(textObjHandles);
