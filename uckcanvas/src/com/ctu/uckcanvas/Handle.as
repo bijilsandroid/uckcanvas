@@ -1,5 +1,6 @@
 /**
  * Selection Handle
+ * Updated 2009-01-21
  **/
 
 package com.ctu.uckcanvas
