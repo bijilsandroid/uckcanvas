@@ -6,7 +6,6 @@
 		    src: url("assets/fonts/TAHOMA.TTF");
 		    fontFamily: "EmbeddedTahoma";
 		}
-	 	
 	</mx:Style>
 	<mx:Script>
 		<![CDATA[
@@ -15,6 +14,7 @@
 			import mx.controls.TextArea;
 
 			public function initApp():void {
+				trace("initApp!");
 				uckAppManager = new UckAppManager(baseCanvas, propertyBar);
 			}
 			
@@ -84,7 +84,7 @@
 			</mx:ViewStack>
 		</mx:HBox>
 		<mx:Canvas id="baseCanvas" width="800" height="500" backgroundColor="#FFFFFF"
-			borderColor="#9FA0A1" borderStyle="solid" borderThickness="0">
+			borderColor="#9FA0A1" borderStyle="solid" borderThickness="0"  verticalScrollPolicy="off" horizontalScrollPolicy="off">
 		</mx:Canvas>
 	</mx:VBox>
 </mx:Application>

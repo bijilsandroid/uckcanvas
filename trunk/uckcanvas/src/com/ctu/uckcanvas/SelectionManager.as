@@ -74,6 +74,7 @@ package com.ctu.uckcanvas
 			var ind:int = _items.indexOf( obj );
 			if( ind == -1 ) { return; }
 			_items.splice( ind	, 1 );
+			obj = null; // destroy object
 		}
 	}
 }
