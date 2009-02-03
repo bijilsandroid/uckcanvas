@@ -88,7 +88,7 @@ package com.ctu.uckcanvas
 			createHandleBorder();
 			createHandles();
 			addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
-			addEventListener( MouseEvent.MOUSE_UP, onMouseUp );
+			stage.addEventListener( MouseEvent.MOUSE_UP, onMouseUp );
 		}
 		
 		protected function createHandleBorder(): void {
@@ -166,11 +166,6 @@ package com.ctu.uckcanvas
 			originalPosition.y = y;
 			originalAngle = Math.atan2(downPoint.y - originalPosition.y, width - (downPoint.x - originalPosition.x))*180/Math.PI;
 			
-			if( removeHandle.hitTestPoint(event.stageX, event.stageY) ){
-				parent.removeChild(this);// what about the registered event listeners of this object?
-				return;
-			}
-			
 			if( resizeHandle.hitTestPoint(event.stageX, event.stageY) ){
 				isResizing = true;
 			}
@@ -188,11 +183,23 @@ package com.ctu.uckcanvas
 		}
 		
 		protected function onMouseUp(event:MouseEvent) : void {
-			trace("onMouseUp");
-			stage.removeEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
+			trace("onMouseUp stage:"+stage);
 			isResizing = false;
 			isMoving = false;
 			isRotating = false;
+			if(stage != null && stage.hasEventListener(MouseEvent.MOUSE_MOVE))
+				stage.removeEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
+			
+			if( removeHandle.hitTestPoint(event.stageX, event.stageY) ){ // remove handle
+				if(this.hasEventListener(MouseEvent.MOUSE_DOWN))
+					this.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+				
+				if(stage != null && stage.hasEventListener(MouseEvent.MOUSE_UP))
+					stage.removeEventListener( MouseEvent.MOUSE_UP, onMouseUp );
+				
+				parent.removeChild(this);
+				return;
+			}
 		}
 		
 		protected function onMouseMove(event:MouseEvent) : void {
@@ -213,8 +220,11 @@ package com.ctu.uckcanvas
 			}
 			
 			if(isResizing){
-				width = originalSize.x + offsetX;
-				height = originalSize.y + offsetY
+				var alpha:Number = Math.atan2(offsetX, offsetY);
+				var rotatedOffsetX:Number = Math.sin(alpha + this.rotation*Math.PI/180) * offsetX/Math.sin(alpha);
+				var rotatedOffsetY:Number = Math.cos(alpha + this.rotation*Math.PI/180) * offsetX/Math.sin(alpha);
+				width = originalSize.x + rotatedOffsetX;
+				height = originalSize.y + rotatedOffsetY;
 				handleBorder.width = width+3;
 				handleBorder.height = height+3;
 			}
@@ -234,6 +244,7 @@ package com.ctu.uckcanvas
 				rotateEffect.play();
 				
 				originalAngle = offsetAngle;
+				trace("rotation angle:"+this.rotation);
 			}
 			
 			event.updateAfterEvent();

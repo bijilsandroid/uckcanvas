@@ -10,7 +10,7 @@ package com.ctu.uckcanvas
 			super();
 			width =1;
 			height =1;
-			setStyle( "borderColor", "#000000" );
+			setStyle( "borderColor", "#0033FF" );
 			setStyle( "borderStyle", "solid" );
 			setStyle( "borderThickness", 1 );
 			setStyle("borderSkin", nl.fxc.skins.FXCDashedBorder);

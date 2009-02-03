@@ -66,7 +66,7 @@ package com.ctu.uckcanvas
 		}
 		
 		public function textTool():void {
-			trace("textTool!");
+			trace("textTool");
 			// remove selection tool
 			if(baseCanvas.hasEventListener(MouseEvent.MOUSE_DOWN)){
 				baseCanvas.removeEventListener(MouseEvent.MOUSE_DOWN, startDrawSelBox);
@@ -205,12 +205,19 @@ package com.ctu.uckcanvas
 		
 		public function clearCanvas():void {
 			trace("clearCanvas");
-			//TODO clean up listener and other garbages!
+			//TODO: clean up listener and other garbages!
 			baseCanvas.removeAllChildren();
 		}
 		
+		public function changeStyle(styleProp:String, value:*):void {
+			var selectedObjects:Array = SelectionManager.instance.getItems();
+			for each(var selectedObj:Selectable in selectedObjects){
+				selectedObj.changeStyle(styleProp, value);
+			}
+		}
+		
 		private function startDrawSelBox(event:MouseEvent):void{
-			trace("start of startDrawSelBox");
+			trace("startDrawSelBox");
 			if(event.eventPhase != EventPhase.AT_TARGET){
 				event.stopPropagation();
 				return;
@@ -242,22 +249,8 @@ package com.ctu.uckcanvas
 			baseCanvas.removeEventListener(MouseEvent.MOUSE_MOVE, drawSelBox);
 		}
 		
-		private function selectArea(event:MouseEvent):void {
-			trace("selectArea");
-			var selectables:Array = SelectionManager.instance.getItems();
-			for each(var selectable:ObjectHandles in selectables){
-					var extendX:Number = selectable.x - selectionBox.x + selectable.width;
-					var extendY:Number = selectable.y - selectionBox.y + selectable.height;
-					if(selectionBox.x <= selectable.x && selectionBox.y <= selectable.y && extendX <= selectionBox.width && extendY <= selectionBox.height){
-						SelectionManager.instance.setSelected(selectable, false);
-					}
-			}
-		}
-
-		
-		
-		public function startDrawTextBox(event:MouseEvent): void {
-			trace("startDrawTextBox!!");
+		private function startDrawTextBox(event:MouseEvent): void {
+			trace("startDrawTextBox");
 			var textObjHandles: ObjectHandles = new ObjectHandles();
 			
 			textObjHandles.x = baseCanvas.mouseX;
@@ -279,20 +272,12 @@ package com.ctu.uckcanvas
 			baseCanvas.addChild(textObjHandles);
 		}
 		
-		public function endDrawTextBox(event:MouseEvent): void {
+		private function endDrawTextBox(event:MouseEvent): void {
 			baseCanvas.removeEventListener(MouseEvent.MOUSE_DOWN, startDrawTextBox);
 			baseCanvas.removeEventListener(MouseEvent.MOUSE_UP, endDrawTextBox);
 			selectionTool();
 		}
 		
-		public function deselectAll(event:MouseEvent):void {
-			trace("deselectAll + isSelecting:"+isSelecting);
-			//if(event.eventPhase == EventPhase.AT_TARGET && !isSelecting){
-				
-				SelectionManager.instance.selectNone();
-			//}
-		}
-
 		private function startDrawPen(event:MouseEvent):void {
 			penLineCanvas = new UIComponent();
 			penLineCanvas.x = 0;
@@ -313,7 +298,7 @@ package com.ctu.uckcanvas
 		}
 		
 		private function endDrawPen(event:MouseEvent):void {
-			trace("penLineCanvas!!!");
+			trace("endDrawPen");
 			baseCanvas.removeEventListener(MouseEvent.MOUSE_MOVE, drawPen);
 			var bounds:Rectangle = penLine.getBounds(baseCanvas);
 			var penHandle:ObjectHandles = new ObjectHandles();
@@ -347,7 +332,7 @@ package com.ctu.uckcanvas
 			
 		}
 		
-		public function loadImage(url:String): void {
+		private function loadImage(url:String): void {
 			trace("loadImage");
 			var img:Image = new Image();
 			img.maintainAspectRatio = false;
@@ -355,7 +340,7 @@ package com.ctu.uckcanvas
 			img.load(url);
 		}
 		
-		public function createImage(event:Event):void {
+		private function createImage(event:Event):void {
 			trace("createImage");
 			var img:Image = Image(event.target);
 			var width:Number = 200, height:Number = 100;
@@ -382,7 +367,7 @@ package com.ctu.uckcanvas
 			selectionTool();
 		}
 		
-		public function startDrawRect(event:MouseEvent):void {
+		private function startDrawRect(event:MouseEvent):void {
 			trace("startDrawRect");
 			var rectObjHandles:ObjectHandles = new ObjectHandles();
 			rectObjHandles.x = baseCanvas.mouseX;
@@ -402,24 +387,38 @@ package com.ctu.uckcanvas
 			baseCanvas.addEventListener(MouseEvent.MOUSE_MOVE, drawRect);
 		}
 		
-		public function drawRect(event:MouseEvent):void {
+		private function drawRect(event:MouseEvent):void {
 			trace("drawRect");
 			var rectObjHandles:ObjectHandles = ObjectHandles(rectObj.parent);
 			rectObjHandles.resize(rectObjHandles.mouseX, rectObjHandles.mouseY);
 		}
 		
-		public function endDrawRect(event:MouseEvent):void {
+		private function endDrawRect(event:MouseEvent):void {
 			trace("endDrawRect");
 			baseCanvas.removeEventListener(MouseEvent.MOUSE_MOVE, drawRect);
 			baseCanvas.removeEventListener(MouseEvent.MOUSE_DOWN, startDrawRect);
 			selectionTool();
 		}
 		
-		public function changeStyle(styleProp:String, value:*):void {
-			var selectedObjects:Array = SelectionManager.instance.getItems();
-			for each(var selectedObj:Selectable in selectedObjects){
-				selectedObj.changeStyle(styleProp, value);
+		private function selectArea(event:MouseEvent):void {
+			trace("selectArea");
+			var selectables:Array = SelectionManager.instance.getItems();
+			for each(var selectable:ObjectHandles in selectables){
+					var extendX:Number = selectable.x - selectionBox.x + selectable.width;
+					var extendY:Number = selectable.y - selectionBox.y + selectable.height;
+					if(selectionBox.x <= selectable.x && selectionBox.y <= selectable.y && extendX <= selectionBox.width && extendY <= selectionBox.height){
+						SelectionManager.instance.setSelected(selectable, false);
+					}
 			}
 		}
+		
+		private function deselectAll(event:MouseEvent):void {
+			trace("deselectAll + isSelecting:"+isSelecting);
+			//if(event.eventPhase == EventPhase.AT_TARGET && !isSelecting){
+				
+				SelectionManager.instance.selectNone();
+			//}
+		}
+		
 	}
 }
